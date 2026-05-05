@@ -1,0 +1,73 @@
+{
+  "name": "stride-dora",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "bun --watch server.js",
+    "start": "bun server.js",
+    "setup:electron": "bun node_modules/electron/install.js",
+    "desktop": "bun scripts/electron-dev.cjs",
+    "dev:desktop": "bun scripts/electron-dev.cjs",
+    "dist:win": "electron-builder --win nsis",
+    "dist:linux": "electron-builder --linux AppImage"
+  },
+  "dependencies": {
+    "lucide": "^1.14.0"
+  },
+  "devDependencies": {
+    "electron": "^35.0.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.otechmista.stride-dora",
+    "productName": "Stride DORA",
+    "asar": false,
+    "files": [
+      "electron/**/*",
+      "server.js",
+      "src/**/*",
+      "public/**/*",
+      "package.json",
+      "node_modules/lucide/dist/umd/lucide.min.js"
+    ],
+    "extraResources": [
+      {
+        "from": "build/bin",
+        "to": "bin",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "category": "Development"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}

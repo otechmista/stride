@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stride DORA - Project Website</title>
+    <style>
+      :root {
+        --accent: #df5d5d;
+        --accent-soft: #f6b2a8;
+        --blue: #38bdf8;
+        --green: #4ade80;
+        --yellow: #f2b56b;
+        --bg: #18181b;
+        --panel: #1f1f24;
+        --panel-2: #222227;
+        --border: #303036;
+        --text: #f4f4f5;
+        --muted: #a1a1aa;
+        --faint: #71717a;
+      }
+
+      * { box-sizing: border-box; }
+      html { color-scheme: dark; }
+      body {
+        margin: 0;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background:
+          radial-gradient(circle at 10% 10%, rgba(223, 93, 93, 0.18), transparent 28rem),
+          radial-gradient(circle at 88% 8%, rgba(56, 189, 248, 0.14), transparent 24rem),
+          var(--bg);
+        color: var(--text);
+      }
+
+      a { color: var(--blue); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      code {
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        background: #151519;
+        color: var(--accent-soft);
+        padding: 0.15rem 0.35rem;
+      }
+      pre {
+        overflow: auto;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: #0f0f12;
+        padding: 1rem;
+      }
+      pre code { border: 0; padding: 0; background: transparent; color: #e4e4e7; }
+
+      .page { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+      .hero { padding: 48px 0 28px; }
+      .brand { display: flex; align-items: center; gap: 14px; }
+      .brand img { width: 56px; height: 56px; }
+      .eyebrow { color: var(--accent-soft); font-size: 0.85rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+      h1 { margin: 18px 0 12px; max-width: 840px; font-size: clamp(2.2rem, 5vw, 4.5rem); line-height: 0.98; letter-spacing: 0; }
+      .lead { max-width: 760px; color: var(--muted); font-size: 1.08rem; line-height: 1.7; }
+      .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+      .button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--panel-2);
+        color: var(--text);
+        font-weight: 700;
+        padding: 0.75rem 1rem;
+      }
+      .button.primary { border-color: var(--accent); background: var(--accent); color: #fff; }
+
+      .grid { display: grid; gap: 16px; }
+      .grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .screens { display: grid; gap: 18px; grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.9fr); align-items: start; }
+      .screen-card {
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: var(--panel);
+        box-shadow: 0 24px 60px rgba(0,0,0,0.22);
+      }
+      .screen-card.featured { align-self: start; }
+      .screen-link {
+        display: block;
+        padding: 10px;
+        background:
+          linear-gradient(180deg, rgba(255,255,255,0.04), transparent),
+          #0f0f12;
+      }
+      .screen-card img {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: 420px;
+        object-fit: contain;
+        border-radius: 8px;
+        background: #0f0f12;
+        cursor: zoom-in;
+      }
+      .screen-card.featured img { max-height: 500px; }
+      .screen-stack { display: grid; gap: 16px; }
+      .screen-caption {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        border-top: 1px solid var(--border);
+        background: rgba(21, 21, 25, 0.74);
+        color: var(--muted);
+        font-size: 0.86rem;
+        padding: 12px 14px;
+      }
+      .screen-caption strong { color: var(--text); }
+      .card {
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.025), transparent), var(--panel);
+        padding: 20px;
+      }
+      .card h3 { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; font-size: 1rem; }
+      .card p, li { color: var(--muted); line-height: 1.65; }
+      section { padding: 26px 0; }
+      h2 { margin: 0 0 14px; font-size: 1.6rem; }
+      .icon {
+        display: inline-grid;
+        place-items: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        background: rgba(223, 93, 93, 0.14);
+        color: var(--accent-soft);
+      }
+      .steps { counter-reset: step; display: grid; gap: 12px; }
+      .step {
+        counter-increment: step;
+        display: grid;
+        grid-template-columns: 36px 1fr;
+        gap: 14px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--panel);
+        padding: 16px;
+      }
+      .step::before {
+        content: counter(step);
+        display: grid;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: var(--accent);
+        font-weight: 800;
+      }
+      .muted { color: var(--muted); }
+      .note {
+        border: 1px solid rgba(242, 181, 107, 0.45);
+        border-radius: 10px;
+        background: rgba(242, 181, 107, 0.1);
+        color: var(--yellow);
+        padding: 14px 16px;
+      }
+      footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+        border-top: 1px solid var(--border);
+        margin-top: 28px;
+        padding: 22px 0 34px;
+        color: var(--faint);
+      }
+      .footer-love {
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 10px;
+      }
+      .lightbox {
+        position: fixed;
+        inset: 0;
+        z-index: 20;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(9, 9, 11, 0.9);
+        padding: 28px;
+      }
+      .lightbox:target { display: flex; }
+      .lightbox img {
+        max-width: min(100%, 1280px);
+        max-height: calc(100vh - 96px);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: #0f0f12;
+        box-shadow: 0 28px 80px rgba(0,0,0,0.5);
+      }
+      .lightbox a {
+        position: absolute;
+        right: 24px;
+        top: 20px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--panel-2);
+        color: var(--text);
+        font-weight: 700;
+        padding: 0.6rem 0.8rem;
+      }
+      .lucide-heart {
+        color: var(--accent);
+        fill: var(--accent);
+        flex: 0 0 auto;
+      }
+      @media (max-width: 720px) {
+        footer {
+          justify-content: flex-start;
+        }
+        .footer-love { justify-content: flex-start; }
+      }
+
+      @media (max-width: 860px) {
+        .grid.cols-3, .grid.cols-2, .screens { grid-template-columns: 1fr; }
+        .hero { padding-top: 34px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <div class="brand">
+          <img src="./assets/stride-icon.svg" alt="Stride icon" />
+          <div>
+            <div class="eyebrow">Open source desktop dashboard</div>
+            <strong>Stride DORA</strong>
+          </div>
+        </div>
+        <h1>Understand your team's delivery health in minutes.</h1>
+        <p class="lead">
+          Stride DORA shows how your team ships software: delivery time, completed work, bugs,
+          backlog, pull requests, deploys, and actionable insights to improve flow.
+        </p>
+        <div class="actions">
+          <a class="button primary" href="#install">Install now</a>
+          <a class="button" href="#features">See features</a>
+          <a class="button" href="https://github.com/otechmista/stride/issues" target="_blank" rel="noopener">Report an issue</a>
+        </div>
+      </section>
+
+      <section id="screens">
+        <h2>Product Screens</h2>
+        <div class="screens">
+          <figure class="screen-card featured">
+            <a class="screen-link" href="#screen-dashboard"><img src="./assets/screens/dashboard.png" alt="DORA dashboard with monthly charts" /></a>
+            <figcaption class="screen-caption"><strong>Dashboard</strong><span>monthly metrics and flow status</span></figcaption>
+          </figure>
+          <div class="screen-stack">
+            <figure class="screen-card">
+              <a class="screen-link" href="#screen-insight"><img src="./assets/screens/insight.png" alt="Insights tab with delivery recommendations" /></a>
+              <figcaption class="screen-caption"><strong>Insights</strong><span>risks and priorities</span></figcaption>
+            </figure>
+            <figure class="screen-card">
+              <a class="screen-link" href="#screen-ai"><img src="./assets/screens/ia-insight.png" alt="AI review of team metrics" /></a>
+              <figcaption class="screen-caption"><strong>AI</strong><span>executive chart review</span></figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section id="features">
+        <h2>What the Software Does</h2>
+        <div class="grid cols-3">
+          <article class="card">
+            <h3><span class="icon">D</span>DORA Dashboard</h3>
+            <p>Shows monthly lead time, throughput, fixed bugs, created cards, backlog, pull requests, and deploys.</p>
+          </article>
+          <article class="card">
+            <h3><span class="icon">F</span>Delivery Flow</h3>
+            <p>Groups work into To do, Doing, and Done to reveal bottlenecks, demand buildup, and work in progress pressure.</p>
+          </article>
+          <article class="card">
+            <h3><span class="icon">AI</span>Insights</h3>
+            <p>Summarizes charts, highlights delivery risks, and suggests practical next actions for the team.</p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <h2>Data Sources</h2>
+        <div class="grid cols-3">
+          <article class="card">
+            <h3><span class="icon">J</span>Jira</h3>
+            <p>Reads issues, types, statuses, creation/resolution dates, and bugs to calculate flow, backlog, and lead time.</p>
+          </article>
+          <article class="card">
+            <h3><span class="icon">G</span>GitHub</h3>
+            <p>Reads pull requests from the configured owner. Merges into main or master are counted as deploys.</p>
+          </article>
+          <article class="card">
+            <h3><span class="icon">AI</span>OpenRouter</h3>
+            <p>Optional. When configured, it generates an executive review of the charts and recommends priorities.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="install">
+        <h2>How to Install</h2>
+        <p class="muted">Install Bun first from <a href="https://bun.sh" target="_blank" rel="noopener">https://bun.sh</a>.</p>
+        <div class="steps">
+          <div class="step">
+            <div>
+              <strong>Windows PowerShell</strong>
+              <p>Run this command from the project root:</p>
+              <pre><code>powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1</code></pre>
+              <p>When it finishes, open the <code>Stride DORA</code> shortcut created on your Desktop.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div>
+              <strong>Linux/macOS shell</strong>
+              <p>Run these commands from the project root:</p>
+              <pre><code>chmod +x ./scripts/install.sh ./scripts/start-stride.sh
+./scripts/install.sh</code></pre>
+              <p>When it finishes, open the <code>Stride DORA</code> launcher created on your Desktop or app menu.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div>
+              <strong>Open manually</strong>
+              <p>After installing, you can also start the desktop app from the terminal:</p>
+              <pre><code>bun run dev:desktop</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>How to Configure</h2>
+        <div class="grid cols-2">
+          <article class="card">
+            <h3><span class="icon">J</span>Jira</h3>
+            <ul>
+              <li>Enter the Jira URL, email, and API token.</li>
+              <li>Leave the Jira project field empty to fetch every accessible active project.</li>
+              <li>After saving, use Update or Resync to fetch data.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3><span class="icon">G</span>GitHub</h3>
+            <ul>
+              <li>Enter the GitHub token and owner.</li>
+              <li>The app fetches accessible repositories for that owner.</li>
+              <li>Pull requests and deploys are available in the Activities tab.</li>
+            </ul>
+          </article>
+        </div>
+        <p class="note">Use tokens with the minimum required permissions. They are stored locally in this installation.</p>
+      </section>
+
+      <section>
+        <h2>How to Use It</h2>
+        <div class="grid cols-3">
+          <article class="card">
+            <h3><span class="icon">1</span>Configure</h3>
+            <p>Open Settings and add Jira, GitHub, and optionally OpenRouter for AI insights.</p>
+          </article>
+          <article class="card">
+            <h3><span class="icon">2</span>Sync</h3>
+            <p>Use Update to fetch new data or Resync to clear local data and synchronize from scratch.</p>
+          </article>
+          <article class="card">
+            <h3><span class="icon">3</span>Improve</h3>
+            <p>Read the charts, inspect cards/PRs/deploys, and use insights to choose the next improvement priority.</p>
+          </article>
+        </div>
+      </section>
+
+      <footer>
+        <span class="footer-love">
+          Created by <a href="https://github.com/otechmista" target="_blank" rel="noopener">otechmista</a>
+          <svg class="lucide-heart" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-label="heart" role="img">
+            <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/>
+          </svg>
+          open source
+        </span>
+      </footer>
+
+      <div id="screen-dashboard" class="lightbox">
+        <a href="#screens">Close</a>
+        <img src="./assets/screens/dashboard.png" alt="DORA dashboard with monthly charts" />
+      </div>
+      <div id="screen-insight" class="lightbox">
+        <a href="#screens">Close</a>
+        <img src="./assets/screens/insight.png" alt="Insights tab with delivery recommendations" />
+      </div>
+      <div id="screen-ai" class="lightbox">
+        <a href="#screens">Close</a>
+        <img src="./assets/screens/ia-insight.png" alt="AI review of team metrics" />
+      </div>
+    </main>
+  </body>
+</html>

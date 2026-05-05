@@ -1,0 +1,75 @@
+name: Build desktop executables
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    name: Build ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows EXE
+            os: windows-latest
+            script: dist:win
+            artifact: windows-exe
+            bun_name: bun.exe
+          - name: Linux AppImage
+            os: ubuntu-latest
+            script: dist:linux
+            artifact: linux-appimage
+            bun_name: bun
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Bundle Bun runtime on Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force build/bin | Out-Null
+          $bun = (Get-Command bun).Source
+          Copy-Item $bun "build/bin/${{ matrix.bun_name }}"
+
+      - name: Bundle Bun runtime on Linux
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          mkdir -p build/bin
+          cp "$(command -v bun)" "build/bin/${{ matrix.bun_name }}"
+          chmod +x "build/bin/${{ matrix.bun_name }}"
+
+      - name: Build desktop app
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run ${{ matrix.script }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: |
+            dist/**/*.exe
+            dist/**/*.AppImage
+            dist/**/*.blockmap
+            dist/latest*.yml
+          if-no-files-found: error
