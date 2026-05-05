@@ -4,7 +4,12 @@ $ProjectRoot = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Pa
 Set-Location $ProjectRoot
 
 if (-not (Get-Command bun -ErrorAction SilentlyContinue)) {
-  Write-Host "Bun not found. Install it from https://bun.sh and run scripts/install.ps1 again." -ForegroundColor Red
+  [System.Windows.Forms.MessageBox]::Show(
+    "Bun nao encontrado.`nInstale em https://bun.sh e rode scripts\install.ps1 novamente.",
+    "Stride DORA",
+    [System.Windows.Forms.MessageBoxButtons]::OK,
+    [System.Windows.Forms.MessageBoxIcon]::Error
+  )
   exit 1
 }
 

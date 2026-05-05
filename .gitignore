@@ -1,4 +1,9 @@
-data/
 node_modules/
+data/
+dist/
+build/bin/
+build/icon*.png
+build/icon*.ico
+scripts/start-stride.vbs
 .cache/
 .env
