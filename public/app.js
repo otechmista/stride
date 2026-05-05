@@ -1,5 +1,5 @@
 const app = document.querySelector('#app');
-const savedTheme = localStorage.getItem('kairo-theme');
+const savedTheme = localStorage.getItem('stride-theme');
 
 const metricMeta = {
   leadTime: { label: 'Lead time', suffix: 'dias', icon: 'timer', color: '#ff6b6b', tint: 'from-[#ff6b6b]/20' },
@@ -1609,7 +1609,7 @@ app.addEventListener('click', async (event) => {
   const themeButton = event.target.closest('[data-action="theme"]');
   if (themeButton) {
     state.theme = themeButton.dataset.theme || 'dark';
-    localStorage.setItem('kairo-theme', state.theme);
+    localStorage.setItem('stride-theme', state.theme);
     render();
     return;
   }
