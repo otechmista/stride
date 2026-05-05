@@ -3,7 +3,7 @@ const { spawn } = require('node:child_process');
 const path = require('node:path');
 
 const rootDir = app.isPackaged ? path.join(process.resourcesPath, 'app') : path.join(__dirname, '..');
-const port = process.env.KAIRO_PORT || '3927';
+const port = process.env.STRIDE_PORT || '3927';
 let serverProcess;
 
 function bunExecutable() {
@@ -24,7 +24,7 @@ function startServer() {
 
   serverProcess.on('exit', (code) => {
     if (!app.isQuitting && code !== 0) {
-      console.error(`Kairo server exited with code ${code}`);
+      console.error(`Stride server exited with code ${code}`);
     }
   });
 }
@@ -41,12 +41,16 @@ async function waitForServer() {
     }
   }
 
-  throw new Error('Kairo server did not start in time');
+  throw new Error('Stride server did not start in time');
 }
 
 async function createWindow() {
   startServer();
   await waitForServer();
+
+  const iconPath = app.isPackaged
+    ? path.join(process.resourcesPath, 'app', 'build', 'icon.png')
+    : path.join(rootDir, 'build', 'icon.png');
 
   const window = new BrowserWindow({
     width: 1180,
@@ -54,7 +58,8 @@ async function createWindow() {
     minWidth: 960,
     minHeight: 640,
     backgroundColor: '#09090b',
-    title: 'Kairo DORA',
+    title: 'Stride DORA',
+    icon: iconPath,
     autoHideMenuBar: true,
     webPreferences: {
       contextIsolation: true,

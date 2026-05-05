@@ -1,15 +1,16 @@
 name: Build desktop executables
 
 on:
+  release:
+    types: [published]
   workflow_dispatch:
-  push:
-    tags:
-      - "v*"
 
 jobs:
   build:
     name: Build ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
     strategy:
       fail-fast: false
       matrix:
@@ -19,11 +20,13 @@ jobs:
             script: dist:win
             artifact: windows-exe
             bun_name: bun.exe
+            glob: "dist/**/*.exe"
           - name: Linux AppImage
             os: ubuntu-latest
             script: dist:linux
             artifact: linux-appimage
             bun_name: bun
+            glob: "dist/**/*.AppImage"
 
     steps:
       - name: Checkout
@@ -42,7 +45,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Bundle Bun runtime on Windows
+      - name: Build icons
+        run: npm run build:icons
+
+      - name: Bundle Bun runtime (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
@@ -50,7 +56,7 @@ jobs:
           $bun = (Get-Command bun).Source
           Copy-Item $bun "build/bin/${{ matrix.bun_name }}"
 
-      - name: Bundle Bun runtime on Linux
+      - name: Bundle Bun runtime (Linux)
         if: runner.os == 'Linux'
         shell: bash
         run: |
@@ -63,13 +69,17 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run ${{ matrix.script }}
 
-      - name: Upload artifact
+      - name: Upload artifact (workflow_dispatch preview)
+        if: github.event_name == 'workflow_dispatch'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact }}
-          path: |
-            dist/**/*.exe
-            dist/**/*.AppImage
-            dist/**/*.blockmap
-            dist/latest*.yml
+          path: ${{ matrix.glob }}
           if-no-files-found: error
+
+      - name: Upload to GitHub Release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ matrix.glob }}
+          tag_name: ${{ github.event.release.tag_name }}

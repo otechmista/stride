@@ -11,14 +11,17 @@
     "desktop": "bun scripts/electron-dev.cjs",
     "dev:desktop": "bun scripts/electron-dev.cjs",
     "dist:win": "electron-builder --win nsis",
-    "dist:linux": "electron-builder --linux AppImage"
+    "dist:linux": "electron-builder --linux AppImage",
+    "build:icons": "node scripts/build-icons.mjs"
   },
   "dependencies": {
     "lucide": "^1.14.0"
   },
   "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
     "electron": "^35.0.0",
-    "electron-builder": "^26.0.12"
+    "electron-builder": "^26.0.12",
+    "png-to-ico": "^2.1.8"
   },
   "build": {
     "appId": "com.otechmista.stride-dora",
@@ -45,6 +48,7 @@
       "output": "dist"
     },
     "win": {
+      "icon": "build/icon.ico",
       "target": [
         {
           "target": "nsis",
@@ -55,6 +59,7 @@
       ]
     },
     "linux": {
+      "icon": "build/icon.png",
       "target": [
         {
           "target": "AppImage",

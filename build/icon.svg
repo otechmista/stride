@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Stride">
+  <defs>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#df5d5d" flood-opacity="0.34"/>
+    </filter>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="#18181b"/>
+  <rect x="16" y="16" width="96" height="96" rx="24" fill="#df5d5d" filter="url(#glow)"/>
+  <path d="M39 76l19-19 13 13 22-25" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M82 45h12v12" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
